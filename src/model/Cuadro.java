@@ -1,17 +1,19 @@
 package model;
 
+import java.awt.Color;
+
 import utils.ColorCuadro;
 
 public class Cuadro {
 	
 	
-	private boolean activo;
+	private boolean activo = false;
 	private ColorCuadro colorCuadro;
+	private Color color;
 	
 	
 	
-	public Cuadro(ColorCuadro colorCuadro) {
-		this.colorCuadro = colorCuadro;
+	public Cuadro() {
 	}
 
 
@@ -22,8 +24,8 @@ public class Cuadro {
 
 
 
-	public void setActivo(boolean activo) {
-		this.activo = activo;
+	public void setActivo() {
+		this.activo = true;
 	}
 
 
@@ -32,10 +34,19 @@ public class Cuadro {
 		return colorCuadro;
 	}
 
+	public void ponerEnGris() {
+		this.color = Color.gray;
+	}
+ 
 
-
-	public void setColorCuadro(ColorCuadro colorCuadro) {
-		this.colorCuadro = colorCuadro;
+	public void setColorCuadro() {
+		this.colorCuadro = ColorCuadro.obtenerColorRandom();
+	}
+	
+	// Funcion para colorear aleatoreamente un cuadro.
+	public void clickEnCuadro() {
+		this.setActivo();
+		this.setColorCuadro();
 	}
 	
 	
