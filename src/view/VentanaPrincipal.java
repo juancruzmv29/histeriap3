@@ -8,6 +8,7 @@ import java.awt.Color;
 import javax.swing.JPanel;
 
 import controller.PartidaController;
+import model.Cuadro;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ public class VentanaPrincipal extends JFrame {
 	private JFrame frame;
 	private JPanel panel;
 	private JButton[][] botones;
+	private Cuadro[][] cuadros;
 	private PartidaController pController;
 	private final int FILAS = 5;
 	private final int COLUMNAS = 5;
@@ -39,18 +41,17 @@ public class VentanaPrincipal extends JFrame {
 		frame.getContentPane().add(panel);
 		panel.setLayout(new GridLayout(FILAS, COLUMNAS));
 		
-		// Generamos un boton en la grilla
-		for(int i = 0; i < FILAS; i++) {
-			for(int j = 0; j < COLUMNAS; j++) {
-				botones[i][j] = new JButton();
-				panel.add(botones[i][j]);
-
-				// Seteamos un color determinado en gris
-				botones[i][j].setBackground(Color.gray);
-				final int fila = i;
-				final int columna = j;
+		cuadros = new Cuadro[FILAS][COLUMNAS];
+		
+		for(int i = 0; i < cuadros.length; i++) {
+			for(int j = 0; j < cuadros[0].length; j++) {
+				cuadros[i][j] = new Cuadro();
+				add(cuadros[i][j].getBoton());
 			}
 		}
+		
+		
+		
 		
 	}
 	

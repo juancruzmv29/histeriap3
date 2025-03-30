@@ -2,6 +2,8 @@ package model;
 
 import java.awt.Color;
 
+import javax.swing.JButton;
+
 import utils.ColorCuadro;
 
 public class Cuadro {
@@ -10,16 +12,32 @@ public class Cuadro {
 	private boolean activo = false;
 	private ColorCuadro colorCuadro;
 	private Color color;
+	private JButton boton;
 	
 	
 	
 	public Cuadro() {
+		this.boton = new JButton();
+		ponerEnGris();
+		this.boton.addActionListener(e -> clickEnCuadro());
 	}
 
 
 
 	public boolean isActivo() {
 		return activo;
+	}
+
+
+
+	public JButton getBoton() {
+		return boton;
+	}
+
+
+
+	public void setBoton(JButton boton) {
+		this.boton = boton;
 	}
 
 
