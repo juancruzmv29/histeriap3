@@ -6,20 +6,18 @@ import javax.swing.JButton;
 
 import utils.ColorCuadro;
 
-public class Cuadro {
+public class Cuadro extends JButton {
 	
 	
 	private boolean activo = false;
 	private ColorCuadro colorCuadro;
 	private Color color;
-	private JButton boton;
 	
 	
 	
 	public Cuadro() {
-		this.boton = new JButton();
-		ponerEnGris();
-		this.boton.addActionListener(e -> clickEnCuadro());
+		this.color = Color.gray;
+		this.addActionListener(e -> clickEnCuadro());
 	}
 
 
@@ -27,19 +25,6 @@ public class Cuadro {
 	public boolean isActivo() {
 		return activo;
 	}
-
-
-
-	public JButton getBoton() {
-		return boton;
-	}
-
-
-
-	public void setBoton(JButton boton) {
-		this.boton = boton;
-	}
-
 
 
 	public void setActivo() {
@@ -59,6 +44,7 @@ public class Cuadro {
 
 	public void setColorCuadro() {
 		this.colorCuadro = ColorCuadro.obtenerColorRandom();
+		this.setBackground(ColorCuadro.obtenerColorRandom().getColor());
 	}
 	
 	// Funcion para colorear aleatoreamente un cuadro.

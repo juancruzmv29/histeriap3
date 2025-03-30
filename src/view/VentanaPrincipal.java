@@ -18,7 +18,6 @@ public class VentanaPrincipal extends JFrame {
 
 	private JFrame frame;
 	private JPanel panel;
-	private JButton[][] botones;
 	private Cuadro[][] cuadros;
 	private PartidaController pController;
 	private final int FILAS = 5;
@@ -35,21 +34,21 @@ public class VentanaPrincipal extends JFrame {
 		frame.getContentPane().setBackground(Color.GRAY);
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
+		frame.getContentPane().setLayout(new GridLayout(5, 5, 2, 2));
 		
 		JPanel panel = new JPanel();
 		frame.getContentPane().add(panel);
-		panel.setLayout(new GridLayout(FILAS, COLUMNAS));
+		panel.setLayout(new GridLayout(5, 5, 0, 0));
 		
 		cuadros = new Cuadro[FILAS][COLUMNAS];
 		
 		for(int i = 0; i < cuadros.length; i++) {
 			for(int j = 0; j < cuadros[0].length; j++) {
 				cuadros[i][j] = new Cuadro();
-				add(cuadros[i][j].getBoton());
+				cuadros[i][j].setPreferredSize(getPreferredSize());
+				panel.add(cuadros[i][j]);
 			}
 		}
-		
 		
 		
 		
@@ -103,10 +102,5 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * Create the application.
 	 */
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	
 
 }
