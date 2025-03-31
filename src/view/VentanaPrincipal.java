@@ -3,23 +3,29 @@ package view;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import java.awt.GridLayout;
 import java.awt.Color;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import controller.PartidaController;
 import model.Cuadro;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 public class VentanaPrincipal extends JFrame {
 
-	private JFrame frame;
-	private JPanel panel;
 	private Cuadro[][] cuadros;
 	private PartidaController pController;
+	private ArrayList<String> jugadores;
+	
 	private final int FILAS = 5;
 	private final int COLUMNAS = 5;
 	
@@ -28,17 +34,16 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal(PartidaController pController) {
 		//initialize();
 		this.pController = pController;
+		jugadores = new ArrayList<>();
 		
-		frame = new JFrame();
-		frame.setSize(903, 300);
-		frame.getContentPane().setBackground(Color.GRAY);
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(5, 5, 2, 2));
 		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel);
-		panel.setLayout(new GridLayout(5, 5, 0, 0));
+		
+		setTitle("Juego Histeria");
+		setSize(600, 600);
+		setLocationRelativeTo(null);																												
+		getContentPane().setLayout(new GridLayout(5, 5, 2, 2));
+		
+		VentanaNombre ventanaInicio = new VentanaNombre(this, jugadores);
 		
 		cuadros = new Cuadro[FILAS][COLUMNAS];
 		
@@ -46,13 +51,34 @@ public class VentanaPrincipal extends JFrame {
 			for(int j = 0; j < cuadros[0].length; j++) {
 				cuadros[i][j] = new Cuadro();
 				cuadros[i][j].setPreferredSize(getPreferredSize());
-				panel.add(cuadros[i][j]);
+				getContentPane().add(cuadros[i][j]);
 			}
 		}
+		
+		/*
+		frame = new JFrame();
+		frame.setSize(903, 300);
+		frame.getContentPane().setBackground(Color.GRAY);
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		/*
+		
+		
+		/*
+		panel = new JPanel();
+		frame.getContentPane().add(panel);
+		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		*/
+		
+		
+		
 		
 		
 		
 	}
+	
+	
+	
 	
 	/*
 	private void initialize() {
@@ -96,8 +122,6 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 	}
-
-	 */
 	
 	/**
 	 * Create the application.
