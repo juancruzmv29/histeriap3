@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class VentanaNombre extends JDialog {
@@ -19,24 +21,31 @@ public class VentanaNombre extends JDialog {
 	
 	
 	public VentanaNombre(JFrame parent, ArrayList<String> jugadores) {
-		super(parent, "Ingrese su nombre", true);
+		super(parent,"Ingrese su nombre", true);
 		this.listaJugadores = jugadores;
 		
-		setLayout(new FlowLayout());
+		
 		setSize(300, 150);
 		setLocationRelativeTo(parent);
+		setLayout(new GridLayout(2, 1));
 		
-		nombreJugador = new JTextField();
+		JPanel panelInput = new JPanel();
+		nombreJugador = new JTextField(15);
 		labelText = new JLabel("Ingrese su nombre");
+		panelInput.add(labelText);
+		panelInput.add(nombreJugador);
 		
-		add(labelText);
-		add(nombreJugador);
-		add(botonAceptar);
+		JPanel panelBoton = new JPanel();
+		botonAceptar = new JButton("Aceptar");
+		panelBoton.add(botonAceptar);
+		
+		
+		add(panelInput);
+		add(panelBoton);
 		
 		nombreJugador.addActionListener(e -> guardarNombreYJugar());
 		botonAceptar.addActionListener(e -> guardarNombreYJugar());
 		
-		setVisible(true);
 	}
 	
 	

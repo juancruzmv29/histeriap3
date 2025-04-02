@@ -44,7 +44,7 @@ public class VentanaPrincipal extends JFrame {
 		getContentPane().setLayout(new GridLayout(5, 5, 2, 2));
 		
 		VentanaNombre ventanaInicio = new VentanaNombre(this, jugadores);
-		
+		ventanaInicio.setVisible(true);
 		cuadros = new Cuadro[FILAS][COLUMNAS];
 		
 		for(int i = 0; i < cuadros.length; i++) {
@@ -55,23 +55,8 @@ public class VentanaPrincipal extends JFrame {
 			}
 		}
 		
-		/*
-		frame = new JFrame();
-		frame.setSize(903, 300);
-		frame.getContentPane().setBackground(Color.GRAY);
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		/*
 		
-		
-		/*
-		panel = new JPanel();
-		frame.getContentPane().add(panel);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
-		*/
-		
-		
-		
+		setVisible(true);
 		
 		
 		

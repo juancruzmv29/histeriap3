@@ -34,7 +34,7 @@ public class PartidaController {
 	public void reiniciarJuego(Cuadro[][] cuadros) {
 		for(int i = 0; i < cuadros.length; i++) {
 			for(int j = 0; j < cuadros[0].length; j++) {
-				cuadros[i][j].ponerEnGris();;
+				cuadros[i][j].ponerEnGris();
 			}
 		}
 		cuadrosColoreados = 0;
