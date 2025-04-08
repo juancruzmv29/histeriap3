@@ -16,15 +16,18 @@ import model.Cuadro;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class VentanaPrincipal extends JFrame {
 
 	private Cuadro[][] cuadros;
 	private PartidaController pController;
-	private ArrayList<String> jugadores;
+	private HashMap<String, Integer> jugadores;
+	private int intentos;
 	
 	private final int FILAS = 5;
 	private final int COLUMNAS = 5;
@@ -34,7 +37,7 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal(PartidaController pController) {
 		//initialize();
 		this.pController = pController;
-		jugadores = new ArrayList<>();
+		jugadores = new HashMap<String, Integer>();
 		
 		
 		
@@ -54,10 +57,41 @@ public class VentanaPrincipal extends JFrame {
 				getContentPane().add(cuadros[i][j]);
 			}
 		}
-		
-		
 		setVisible(true);
 		
+		// Si el jugador perdio el juego
+		if(pController.perdisteJuego(cuadros)) {
+		    VentanaGameOver ventanaGameOver = new VentanaGameOver(this);
+		    ventanaGameOver.setVisible(true);
+
+		    ventanaGameOver.getBotonSeguir().addActionListener(e -> {
+		        ventanaGameOver.dispose(); // Cierra la ventana de Game Over
+		        dispose(); // Cierra esta ventana principal actual (opcional, depende si querés resetear)
+		        
+		        // Reinicia el juego creando una nueva instancia
+		        SwingUtilities.invokeLater(() -> {
+		            new VentanaPrincipal(new PartidaController(cuadros));
+		        });
+		    });
+		}
+
+		
+		// Agregue esto si gana el juego
+		if(pController.todosCuadrosActivos(cuadros)) {
+			jugadores.put(ventanaInicio.getNombreJugador(), intentos);
+			VentanaGameOver ventanaGameOver = new VentanaGameOver(this);
+			ventanaGameOver.setVisible(true);
+			
+			ventanaGameOver.getBotonSeguir().addActionListener(e -> {
+		        ventanaGameOver.dispose(); // Cierra la ventana de Game Over
+		        dispose(); // Cierra esta ventana principal actual (opcional, depende si querés resetear)
+		        
+		        // Reinicia el juego creando una nueva instancia
+		        SwingUtilities.invokeLater(() -> {
+		            new VentanaPrincipal(new PartidaController(cuadros));
+		        });
+		    });
+		}
 		
 		
 	}

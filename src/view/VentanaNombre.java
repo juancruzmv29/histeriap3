@@ -3,6 +3,7 @@ package view;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -14,13 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class VentanaNombre extends JDialog {
-	private List<String> listaJugadores;
+	private HashMap<String, Integer> listaJugadores;
 	private JTextField nombreJugador;
 	private JLabel labelText;
 	private JButton botonAceptar;
 	
 	
-	public VentanaNombre(JFrame parent, ArrayList<String> jugadores) {
+	public VentanaNombre(JFrame parent, HashMap<String, Integer> jugadores) {
 		super(parent,"Ingrese su nombre", true);
 		this.listaJugadores = jugadores;
 		
@@ -51,12 +52,31 @@ public class VentanaNombre extends JDialog {
 	
 	private void guardarNombreYJugar() {
 		String nombre = nombreJugador.getText().trim();
-		if(!nombre.isEmpty()) {
-			listaJugadores.add(nombre);
-			dispose();
-		} else {
+		if(nombre.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Ingrese un nombre válido");
 		}
 		
 	}
+
+
+	public String getNombreJugador() {
+		return nombreJugador.toString();
+	}
+
+
+	public void setNombreJugador(JTextField nombreJugador) {
+		this.nombreJugador = nombreJugador;
+	}
+
+
+	public JLabel getLabelText() {
+		return labelText;
+	}
+
+
+	public void setLabelText(JLabel labelText) {
+		this.labelText = labelText;
+	}
+	
+	
 }
