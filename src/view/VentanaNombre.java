@@ -20,7 +20,7 @@ public class VentanaNombre extends JDialog {
 	private JLabel labelText;
 	private JButton botonAceptar;
 	
-	
+	/*
 	public VentanaNombre(JFrame parent, HashMap<String, Integer> jugadores) {
 		super(parent,"Ingrese su nombre", true);
 		this.listaJugadores = jugadores;
@@ -47,7 +47,30 @@ public class VentanaNombre extends JDialog {
 		nombreJugador.addActionListener(e -> guardarNombreYJugar());
 		botonAceptar.addActionListener(e -> guardarNombreYJugar());
 		
-	}
+	}*/
+	
+	public VentanaNombre(JFrame parent, HashMap<String, Integer> jugadores) {
+        super(parent, "Ingresar nombre", true);
+        setSize(300, 100);
+        setLocationRelativeTo(parent);
+        setLayout(new FlowLayout());
+
+        JLabel label = new JLabel("Nombre del jugador:");
+        nombreJugador = new JTextField(15);
+        add(label);
+        add(nombreJugador);
+
+        // Escuchamos Enter en el campo de texto
+        nombreJugador.addActionListener(e -> {
+        	String nombre = nombreJugador.toString();
+            nombre = nombreJugador.getText().trim();
+            if (!nombre.isEmpty()) {
+                dispose(); // Cierra esta ventana
+            } else {
+                JOptionPane.showMessageDialog(this, "Debe ingresar un nombre.");
+            }
+        });
+    }
 	
 	
 	private void guardarNombreYJugar() {

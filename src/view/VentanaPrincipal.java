@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import java.awt.GridLayout;
 import java.awt.Color;
@@ -15,9 +16,13 @@ import model.Cuadro;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -27,7 +32,7 @@ public class VentanaPrincipal extends JFrame {
 	private Cuadro[][] cuadros;
 	private PartidaController pController;
 	private HashMap<String, Integer> jugadores;
-	private int intentos;
+	private int intentosClicks = 0;
 	
 	private final int FILAS = 5;
 	private final int COLUMNAS = 5;
@@ -49,101 +54,129 @@ public class VentanaPrincipal extends JFrame {
 		VentanaNombre ventanaInicio = new VentanaNombre(this, jugadores);
 		ventanaInicio.setVisible(true);
 		cuadros = new Cuadro[FILAS][COLUMNAS];
-		
-		for(int i = 0; i < cuadros.length; i++) {
-			for(int j = 0; j < cuadros[0].length; j++) {
-				cuadros[i][j] = new Cuadro();
-				cuadros[i][j].setPreferredSize(getPreferredSize());
-				getContentPane().add(cuadros[i][j]);
-			}
+		for (int i = 0; i < FILAS; i++) {
+		    for (int j = 0; j < COLUMNAS; j++) {
+		        Cuadro cuadro = new Cuadro();
+		        cuadros[i][j] = cuadro;
+		        cuadro.setPreferredSize(getPreferredSize());
+
+		        final int x = i;
+		        final int y = j;
+
+		        cuadro.addActionListener(e -> {
+		            Color colorCentral = cuadro.getBackground();
+		            intentosClicks++;
+
+		            // Coordenadas de vecinos
+		            int[][] vecinos = {
+		                {x - 1, y}, // arriba
+		                {x + 1, y}, // abajo
+		                {x, y - 1}, // izquierda
+		                {x, y + 1}  // derecha
+		            };
+
+		            for (int[] v : vecinos) {
+		                int fila = v[0];
+		                int col = v[1];
+
+		                if (fila >= 0 && fila < FILAS && col >= 0 && col < COLUMNAS) {
+		                    Cuadro vecino = cuadros[fila][col];
+		                    Color colorVecino = vecino.getBackground();
+
+		                    if (colorVecino.equals(colorCentral)) {
+		                        // Mismo color, se apagan ambos
+		                        vecino.ponerEnGris();
+		                        cuadro.ponerEnGris();
+		                    } else {
+		                        // Activar el vecino con un nuevo color
+		                        vecino.clickEnCuadro();
+		                    }
+		                }
+		            }
+		        });
+		        
+		        cuadros[i][j].addActionListener(e -> {
+		            pController.colorearCuadro(cuadros[x][y]);
+
+		            // Verificamos si el jugador ganó
+		            if (pController.todosCuadrosActivos(cuadros)) {
+		                JOptionPane.showMessageDialog(this, "¡Ganaste el juego!");
+		                dispose(); // cerrar la ventana actual si querés
+		            }
+
+		            // También podés verificar si perdió
+		            if (pController.perdisteJuego(cuadros)) {
+		                JOptionPane.showMessageDialog(this, "¡Perdiste el juego!");
+		                dispose();
+		            }
+		        });
+
+		        getContentPane().add(cuadro);
+		        cuadros[i][j].addActionListener(e -> {
+		            pController.colorearCuadro(cuadros[x][y]);
+		            intentosClicks++;
+		            
+		            if (pController.todosCuadrosActivos(cuadros)) {
+		                jugadores.put(ventanaInicio.getNombreJugador(), intentosClicks);
+		                guardarRankingEnArchivo(jugadores);
+
+		                String mensajeFinal = "¡Ganaste el juego!";
+		                mostrarMenuFinal(mensajeFinal);
+		            }
+
+		            if (pController.perdisteJuego(cuadros)) {
+		                String mensajeFinal = "¡Perdiste el juego!";
+		                mostrarMenuFinal(mensajeFinal);
+		            }
+		        });
+		    }
 		}
+		
+		
+		
 		setVisible(true);
 		
-		// Si el jugador perdio el juego
-		if(pController.perdisteJuego(cuadros)) {
-		    VentanaGameOver ventanaGameOver = new VentanaGameOver(this);
-		    ventanaGameOver.setVisible(true);
-
-		    ventanaGameOver.getBotonSeguir().addActionListener(e -> {
-		        ventanaGameOver.dispose(); // Cierra la ventana de Game Over
-		        dispose(); // Cierra esta ventana principal actual (opcional, depende si querés resetear)
-		        
-		        // Reinicia el juego creando una nueva instancia
-		        SwingUtilities.invokeLater(() -> {
-		            new VentanaPrincipal(new PartidaController(cuadros));
-		        });
-		    });
-		}
-
-		
-		// Agregue esto si gana el juego
-		if(pController.todosCuadrosActivos(cuadros)) {
-			jugadores.put(ventanaInicio.getNombreJugador(), intentos);
-			VentanaGameOver ventanaGameOver = new VentanaGameOver(this);
-			ventanaGameOver.setVisible(true);
-			
-			ventanaGameOver.getBotonSeguir().addActionListener(e -> {
-		        ventanaGameOver.dispose(); // Cierra la ventana de Game Over
-		        dispose(); // Cierra esta ventana principal actual (opcional, depende si querés resetear)
-		        
-		        // Reinicia el juego creando una nueva instancia
-		        SwingUtilities.invokeLater(() -> {
-		            new VentanaPrincipal(new PartidaController(cuadros));
-		        });
-		    });
-		}
-		
-		
 	}
 	
-	
-	
-	
-	/*
-	private void initialize() {
-		frame = new JFrame();
-		frame.setSize(903, 300);
-		frame.getContentPane().setBackground(Color.GRAY);
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel);
-		panel.setLayout(new GridLayout(FILAS, COLUMNAS));
-		
-		// Generamos un boton en la grilla
-		for(int i = 0; i < FILAS; i++) {
-			for(int j = 0; j < COLUMNAS; j++) {
-				botones[i][j] = new JButton();
-				panel.add(botones[i][j]);
-
-				// Seteamos un color determinado en gris
-				botones[i][j].setBackground(Color.gray);
-				final int fila = i;
-				final int columna = j;
-			}
-		}
-		
-	}*/
-
-	/**
-	 * Launch the application.
-	 * public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaPrincipal window = new VentanaPrincipal();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public void guardarRankingEnArchivo(HashMap<String, Integer> jugadores) {
+	    try (PrintWriter writer = new PrintWriter(new FileWriter("ranking.txt", true))) {
+	        for (Map.Entry<String, Integer> entry : jugadores.entrySet()) {
+	            writer.println(entry.getKey() + ":" + entry.getValue());
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
 	}
 	
-	/**
-	 * Create the application.
-	 */
+	private void reiniciarJuego() {
+	    Cuadro[][] nuevosCuadros = new Cuadro[FILAS][COLUMNAS];
+	    SwingUtilities.invokeLater(() -> new VentanaPrincipal(new PartidaController(nuevosCuadros)));
+	}
+	
+	private void mostrarMenuFinal(String mensajeFinal) {
+	    String[] opciones = {"Seguir jugando", "Ver ranking", "Salir"};
+	    int opcion = JOptionPane.showOptionDialog(this,
+	            mensajeFinal,
+	            "Juego terminado",
+	            JOptionPane.DEFAULT_OPTION,
+	            JOptionPane.INFORMATION_MESSAGE,
+	            null,
+	            opciones,
+	            opciones[0]);
+
+	    switch (opcion) {
+	        case 0:
+	            dispose();
+	            reiniciarJuego();
+	            break;
+	        case 1:
+	            new VentanaRanking();
+	            break;
+	        case 2:
+	        default:
+	            System.exit(0);
+	            break;
+	    }
+	}
 
 }

@@ -28,7 +28,11 @@ public class Cuadro extends JButton {
 
 
 	public void setActivo() {
-		this.activo = true;
+		if(!this.activo) {
+			this.activo = true;
+		} else {
+			this.activo = false;
+		}
 	}
 
 
@@ -43,14 +47,19 @@ public class Cuadro extends JButton {
  
 
 	public void setColorCuadro() {
-		this.colorCuadro = ColorCuadro.obtenerColorRandom();
-		this.setBackground(ColorCuadro.obtenerColorRandom().getColor());
+	    this.colorCuadro = ColorCuadro.obtenerColorRandom();
+	    this.setBackground(colorCuadro.getColor());
 	}
-	
+
 	// Funcion para colorear aleatoreamente un cuadro.
 	public void clickEnCuadro() {
-		this.setActivo();
-		this.setColorCuadro();
+		if(!this.activo) {
+			this.setActivo();
+			this.setColorCuadro();
+		} else {
+			this.activo = false;
+			this.ponerEnGris();
+		}
 	}
 	
 	
